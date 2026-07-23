@@ -19,12 +19,20 @@ type SessionDetail= {
   createdOn : string
 }
 
+type messages = {
+  role : string,
+  text : string
+}
+
 function MedicalVoiceAgent() {
 
   const {sessionId} = useParams()
   const [sessionDetail, setSessionDetail] = useState<SessionDetail>()
   const [callStarted , setCallStarted] = useState(false)
   const [vapiInstance, setVapiInstance] = useState<any>()
+  const [currentRole, setCurrentRole] = useState<string | null>()
+  const [liveTranscript, setLiveTranscript] = useState<string>()
+  const [messages, setMessages] = useState<messages[]>([])
   
 
 
@@ -65,8 +73,30 @@ function MedicalVoiceAgent() {
 
     vapi.on('message', (message) => {
         if (message.type === 'transcript') {
+          const {role, transcriptType, transcript} = message
           console.log(`${message.role}: ${message.transcript}`);
+
+          if(transcriptType == 'partial'){
+              setLiveTranscript(transcript)
+              setCurrentRole(role)
+          }
+          else if (transcriptType == 'final'){
+                setMessages((prev : any )=>[...prev , {role : role, text: transcript} ])
+                setLiveTranscript("")
+                setCurrentRole(null)
+
+          }
+          
         }
+    });
+
+     vapiInstance.on('speech-start', () => {
+      setCurrentRole('assistant');
+      
+    });
+    vapiInstance.on('speech-end', () => {
+      console.log('Assistant stopped speaking');
+      setCurrentRole('user')
     });
 
 
@@ -101,9 +131,17 @@ function MedicalVoiceAgent() {
           <h2 className='mt-1 text-lg'>{sessionDetail?.selectedDoctor?.specialist}</h2>
           <p className='text-sm text-gray-400'>AI Medical Voice Agent</p>
 
-          <div className='mt-32'>
-              <h2 className='text-gray-400'>Assistant Msg</h2>
-              <h2 className='text-lg'>User Msg</h2>
+          <div className='mt-12 overflow-y-auto flex flex-col items-center px-10 md:px-28 lg:px-52 xl:px-72'>
+              {messages?.slice(-4).map((msg : messages, index)=>(
+                    
+                  <h2 key={index} className='text-gray-400 p-2 '> {msg.role} : {msg.text}</h2>
+                    
+              ))}
+              
+              {
+              liveTranscript&&liveTranscript.length > 0 &&
+                <h2 className='text-lg'>{currentRole} : {liveTranscript}</h2>              
+              }
           </div>
 
           {!callStarted ? 

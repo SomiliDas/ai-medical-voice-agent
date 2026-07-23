@@ -17,6 +17,7 @@ import axios from 'axios'
 import { doctorAgent } from './DoctorAgentCard'
 import { Loader2 } from 'lucide-react'
 import SuggestedDoctorCard from './SuggestedDoctorCard'
+import { useRouter } from 'next/navigation'
 
 
 function AddNewSessionDialog() {
@@ -26,6 +27,8 @@ function AddNewSessionDialog() {
     const [loading, setLoading] = useState(false)
     const [suggestedDoctors, setSuggestedDoctors] = useState<doctorAgent>()
     const [selectedDoctor, setSelectedDoctor] = useState<doctorAgent>()
+    const router = useRouter()
+
 
     const onClickNext= async()=>{
         setLoading(true)
@@ -40,14 +43,16 @@ function AddNewSessionDialog() {
 
     const onStartConsultation = async()=>{
         setLoading(true)
-        const result = await axios.post('api/session-chat',{
+        const result = await axios.post('/api/session-chat',{
             notes : note,
             selectedDoctor : selectedDoctor
         })
         console.log(result.data)
         if(result.data?.sessionId){
-            console.log(result.data.sessionId)
-            //route new convo screen
+            const sessionId = result.data.sessionId
+             
+            router.push('/dashboard/medical-agent/'+sessionId)
+
         }
         setLoading(false)
     }

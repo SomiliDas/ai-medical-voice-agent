@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { db } from "@/config/db";
 import { SessionChatTable } from "@/config/schema";
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from '@clerk/nextjs/server';
+import { eq } from 'drizzle-orm';
 
 export async function POST(req : NextRequest){
     const {notes, selectedDoctor} = await req.json()
@@ -24,4 +24,25 @@ export async function POST(req : NextRequest){
     }catch(err){
         return NextResponse.json(err)
     }
+}
+
+
+
+export async function GET(req: NextRequest){
+
+    try{
+
+            const {searchParams} = new URL(req.url)
+            const sessionId = searchParams.get('sessionId')
+            const user = await currentUser()
+
+            //@ts-ignore
+            const result = await db.select().from(SessionChatTable).where(eq(SessionChatTable.sessionId , sessionId))
+
+
+            return NextResponse.json(result[0])
+    }catch(err){
+        return NextResponse.json(err)
+    }
+    
 }

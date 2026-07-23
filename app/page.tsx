@@ -127,7 +127,7 @@ const Navbar = () => {
            : 
           <div className="flex gap-5 items-center">
             <UserButton/>
-            <Button className="bg-gray-900 cursor-pointer">Dashboard</Button>
+            <Link href={'/dashboard'}><Button className="bg-gray-900 cursor-pointer">Dashboard</Button> </Link>
           </div>
       }
     </nav>

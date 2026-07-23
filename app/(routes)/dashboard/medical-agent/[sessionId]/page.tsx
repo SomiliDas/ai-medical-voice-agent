@@ -57,7 +57,34 @@ function MedicalVoiceAgent() {
 
     const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
     setVapiInstance(vapi)
-    vapi.start(process.env.NEXT_PUBLIC_VAPI_VOICE_ASSISTANT_ID);
+
+    const vapiAgentConfig ={
+
+      name : 'AI Medical Doctor Voice Agent',
+      firstMessage : "Hi!, I'm your AI Medical Assistant. I'm here to help with you with any health issues.",
+      transcriber : {
+        provider : 'assembly-ai',
+        language : 'en'
+      },
+      voice : {
+        provider : 'vapi',
+        voiceId : sessionDetail?.selectedDoctor?.voiceId
+      },
+      model : {
+        provider : 'openai',
+        model : 'gpt-4.1',
+        messages : [
+          {
+             role : 'system',
+             content : sessionDetail?.selectedDoctor?.agentPrompt
+          }
+        ]
+      }
+
+    }
+
+    //@ts-ignore
+    vapi.start(vapiAgentConfig);
 
 
     vapi.on('call-start', () => {

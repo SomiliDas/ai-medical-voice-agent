@@ -2,12 +2,14 @@
 
 import Vapi from '@vapi-ai/web';
 import axios from 'axios'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { doctorAgent } from '../../_components/DoctorAgentCard'
-import { Circle, PhoneCall, PhoneOff } from 'lucide-react'
+import { Circle, Loader, PhoneCall, PhoneOff } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner';
+
 
 
 type SessionDetail= {
@@ -27,12 +29,14 @@ type messages = {
 function MedicalVoiceAgent() {
 
   const {sessionId} = useParams()
+  const [loading, setLoading ] = useState(false)
   const [sessionDetail, setSessionDetail] = useState<SessionDetail>()
   const [callStarted , setCallStarted] = useState(false)
   const [vapiInstance, setVapiInstance] = useState<any>()
   const [currentRole, setCurrentRole] = useState<string | null>()
   const [liveTranscript, setLiveTranscript] = useState<string>()
   const [messages, setMessages] = useState<messages[]>([])
+  const router = useRouter()
   
 
 
@@ -50,6 +54,20 @@ function MedicalVoiceAgent() {
     sessionId && getSessionDetails();
 
   }, [sessionId])
+
+
+
+  const generateReport = async () =>{
+            const result = await axios.post('/api/medical-report', {
+              messages : messages,
+              sessionDetail : sessionDetail,
+              sessionId : sessionId
+            })
+
+            console.log(result.data)
+            return result.data
+          }
+
 
 
 
@@ -92,10 +110,23 @@ function MedicalVoiceAgent() {
       console.log('Call started')
     });
 
-    vapi.on('call-end', () => {
+    vapi.on('call-end', async() => {
         console.log('Call ended')
         setCallStarted(false)
+        await generateReport()
+
+        setVapiInstance(null)
+        setLoading(false)
+
+
+        toast.success("Report Generated!")
+
+        router.replace('/dashboard')
     });
+
+    
+    
+
 
 
     vapi.on('message', (message) => {
@@ -117,11 +148,11 @@ function MedicalVoiceAgent() {
         }
     });
 
-     vapiInstance.on('speech-start', () => {
+     vapi.on('speech-start', () => {
       setCurrentRole('assistant');
       
     });
-    vapiInstance.on('speech-end', () => {
+    vapi.on('speech-end', () => {
       console.log('Assistant stopped speaking');
       setCurrentRole('user')
     });
@@ -130,20 +161,19 @@ function MedicalVoiceAgent() {
   }
 
 
-    const endCall = () => {
+    const endCall = async () => {
+            setLoading(true)
             if (!vapiInstance) {
               return
             }
              vapiInstance.stop();
-             vapiInstance.off('call-start')
-             vapiInstance.off('call-end')
-             vapiInstance.off('message')
 
              setCallStarted(false)
-             setVapiInstance(null)
-
           };
 
+
+    
+          
 
   return (
     <div className='p-5 border rounded-3xl bg-secondary mx-12'>
@@ -172,9 +202,9 @@ function MedicalVoiceAgent() {
           </div>
 
           {!callStarted ? 
-            <Button className='mt-20 cursor-pointer bg-gray-900' onClick={startCall}> <PhoneCall/> Start Call </Button>
+            <Button className='mt-20 cursor-pointer bg-gray-900' onClick={startCall} disabled={loading}> {!loading ? <PhoneCall/> : <Loader className='animate-spin'/>} Start Call </Button>
              :
-             <Button variant={'destructive'} className='mt-20 cursor-pointer bg-gray-900' onClick={endCall}> <PhoneOff/> Disconnect </Button>
+             <Button variant={'destructive'} className='mt-20 cursor-pointer bg-gray-900' onClick={endCall} disabled={loading}> {!loading ? <PhoneOff/> : <Loader className='animate-spin'/>} Disconnect </Button>
           }
 
         </div>}

@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 
 
-type SessionDetail= {
+export type SessionDetail= {
   id : number,
   notes : string,
   sessionId : string,
@@ -21,7 +21,7 @@ type SessionDetail= {
   createdOn : string
 }
 
-type messages = {
+export type messages = {
   role : string,
   text : string
 }

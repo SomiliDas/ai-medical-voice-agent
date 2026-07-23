@@ -61,8 +61,8 @@ function AddNewSessionDialog() {
   return (
     <div>
                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="mt-5 cursor-pointer bg-gray-900 px-4 rounded-lg text-white py-2"> + Start a Consultation</Button>
+                    <DialogTrigger render={<Button className="mt-5 cursor-pointer bg-gray-900 px-4 rounded-lg text-white py-2"/>}>
+                         + Start a Consultation
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
@@ -94,10 +94,10 @@ function AddNewSessionDialog() {
                         </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
-                            <DialogClose>
-                                <Button variant={"outline"}>Cancel</Button>
+                            <DialogClose render={<Button variant="outline" />}>
+                                Cancel
                             </DialogClose>
-                            {
+                                                            {
                                 !suggestedDoctors?
                                         <Button disabled={!note || loading} onClick={()=>(onClickNext())}> Next {loading ?  <Loader2 className='animate-spin'  /> : <IconArrowRight/>}</Button>
                                         :

@@ -6,14 +6,23 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req : NextRequest){
     const user = await currentUser();
+    const email = user?.primaryEmailAddress?.emailAddress;
+
+            if (!email) {
+            return NextResponse.json(
+                { error: "User email not found" },
+                { status: 400 }
+            );
+            }
 
     try{
         // @ts-ignore
-        const users = await db.select().from(usersTable).where(eq(usersTable.email , user?.primaryEmailAddress?.emailAddress))
+        const users = await db.select().from(usersTable).where(eq(usersTable.email , email))
         if(users?.length == 0){
+            
             const result = await db.insert(usersTable).values({
                 name : user?.fullName ?? '',
-                email : user?.primaryEmailAddress?.emailAddress,
+                email,
                 credits : 10
             }).returning();
 

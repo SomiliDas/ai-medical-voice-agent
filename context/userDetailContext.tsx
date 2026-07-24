@@ -2,4 +2,13 @@ import { UsersDetail } from "@/app/provider";
 import { createContext } from "react";
 
 
-export const UserDetailContext = createContext<UsersDetail | undefined>(undefined)
+type UserDetailContextType = {
+  userDetail?: UsersDetail;
+  setUserDetail: React.Dispatch<
+    React.SetStateAction<UsersDetail | undefined>
+  >;
+}
+
+
+export const UserDetailContext =
+  createContext<UserDetailContextType | undefined>(undefined);

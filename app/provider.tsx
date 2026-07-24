@@ -29,6 +29,7 @@ function Provider({
         setUserDetail(result.data)
 
     }
+    
 
     useEffect(()=>{
         user&&CreateNewUser();

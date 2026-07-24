@@ -20,8 +20,8 @@ const menuOptions = [
 
     {
         id : 3,
-        name : 'Pricing',
-        path :'/pricing'
+        name : 'Billing',
+        path :'/dashboard/billing'
     },
     {
         id : 4,

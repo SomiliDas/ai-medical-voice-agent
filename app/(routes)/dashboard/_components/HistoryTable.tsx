@@ -24,11 +24,11 @@ function HistoryTable({historyList}: props) {
         <Table>
             <TableCaption>Previous Consultation Reports</TableCaption>
             <TableHeader>
-                <TableRow>
-                    <TableHead >AI Medical Specialist</TableHead>
-                    <TableHead >Description</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
+                <TableRow >
+                    <TableHead className='font-extrabold text-lg' >AI Medical Specialist</TableHead>
+                    <TableHead className='font-extrabold text-lg' >Description</TableHead>
+                    <TableHead className='font-extrabold text-lg'>Time</TableHead>
+                    <TableHead className="text-right font-extrabold text-lg">Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>

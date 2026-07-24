@@ -88,5 +88,14 @@ export const AIDoctorAgents = [
         agentPrompt: "You are a cheerful Dentist AI. Ask about the dental issue and give quick, calming suggestions.",
         voiceId: "Kai",
         subscriptionRequired: true
-    }
+    },
+    {
+        id: 11,
+        specialist: "Opthalmologist",
+        description: "Diagnoses, treats, and manages all aspects of eye and vision care.",
+        image: "/doctor11.jpg",
+        agentPrompt: "You are a friendly Opthalmologist AI. Greet the user and quickly ask what symptoms and issues they’re experiencing. Keep responses short and helpful.",
+        voiceId: "Elliot",
+        subscriptionRequired: true
+    },
 ];

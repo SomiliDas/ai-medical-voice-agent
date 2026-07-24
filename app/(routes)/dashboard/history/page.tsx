@@ -3,7 +3,9 @@ import HistoryList from '../_components/HistoryList'
 
 function History() {
   return (
-    <div><HistoryList/></div>
+    <div className='p-10 md:px-20 lg:px-48'>
+      <HistoryList/>
+    </div>
   )
 }
 

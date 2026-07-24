@@ -61,7 +61,7 @@ function ViewReportDialog({ record }: prop) {
           </DialogTitle>
         </DialogHeader>
 
-        <DialogDescription asChild>
+        <DialogDescription>
           <div className="space-y-8 text-sm text-slate-700">
             <section className="space-y-3">
               <div className="flex items-center gap-3">

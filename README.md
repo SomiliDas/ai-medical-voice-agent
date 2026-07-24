@@ -103,5 +103,5 @@ Main tables include:
 
 GitHub: https://github.com/SomiliDas
 
-LinkedIn: *(Add your LinkedIn URL here)*
+
 

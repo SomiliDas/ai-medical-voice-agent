@@ -1,4 +1,4 @@
-# 🩺 AI Medical Voice Agent
+# 🩺 MediVoiceAI : AI Medical Voice Agent
 
 An AI-powered medical voice assistant that enables users to have natural voice conversations with virtual doctors. The application uses AI to understand user symptoms, generate intelligent responses, and maintain conversation history.
 
